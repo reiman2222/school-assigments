@@ -1,0 +1,33 @@
+Jack Edwards
+2540
+Assignment 1
+
+Test Input:
+-1
+-1
+ctrl+d
+
+Reason:
+I used this test to ensure that the program would not crash if the user purchased zero items.
+
+Test input:
+11012
+0
+crtl+d
+
+Reason: 
+I used this test to ensure that to cost of buying zero items would be zero.
+
+Test Input:
+30007 4
+11010 6
+11014 2
+20115 1
+11110 5
+30007 5
+-1 -1
+11012 1
+-1 -1
+ctrl+d
+Reason:
+I used this test to ensure that my output matched the sample output and ensure that errors were handled properly. I also used this test to check the mathmatical calculations performed by my program.
