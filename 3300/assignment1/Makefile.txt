@@ -1,0 +1,18 @@
+CFLAGS = -Wall -Wshadow -Wuninitialized
+CCG    = g++ $(CFLAGS) -g
+CCO    = g++ $(CFLAGS) -O
+
+hailstone: hailstone.cpp
+	$(CCO) -o hailstone hailstone.cpp
+
+hailstoned: hailstone.cpp
+	$(CCG) -o hailstone hailstone.cpp
+
+run: hailstone
+	./hailstone
+
+debug: hailstone
+	gdb ./hailstone
+
+clean:
+	rm hailstone hailstoned
