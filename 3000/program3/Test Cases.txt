@@ -1,0 +1,134 @@
+Test Cases:
+
+test 1:
+./prod-cons.o
+
+Output:
+ERROR no argument given.
+
+
+test 2:
+./prod-cons.o 55
+
+x is: 30
+Producer: 11
+Producer: 89
+Producer: 50
+Producer: 65
+Producer: 71
+Producer: 15
+Producer: 18
+Producer: 55
+Producer: 88
+Producer: 72
+Consumer: 11, 121
+Consumer: 89, 7921
+Consumer: 50, 2500
+Consumer: 65, 4225
+Consumer: 71, 5041
+Consumer: 15, 225
+Consumer: 18, 324
+Consumer: 55, 3025
+Consumer: 88, 7744
+Consumer: 72, 5184
+Producer: 54
+Producer: 96
+Producer: 32
+Producer: 72
+Producer: 45
+Producer: 65
+Producer: 59
+Producer: 34
+Producer: 56
+Producer: 25
+Consumer: 54, 2916
+Consumer: 96, 9216
+Consumer: 32, 1024
+Consumer: 72, 5184
+Consumer: 45, 2025
+Consumer: 65, 4225
+Consumer: 59, 3481
+Consumer: 34, 1156
+Consumer: 56, 3136
+Consumer: 25, 625
+Producer: 6
+Producer: 84
+Producer: 23
+Producer: 59
+Producer: 32
+Producer: 52
+Producer: 47
+Producer: 29
+Producer: 56
+Producer: 88
+Consumer: 6, 36
+Consumer: 84, 7056
+Consumer: 23, 529
+Consumer: 59, 3481
+Consumer: 32, 1024
+Consumer: 52, 2704
+Consumer: 47, 2209
+Consumer: 29, 841
+Consumer: 56, 3136
+Consumer: 88, 7744
+Threads joining
+
+test 3:
+./prod-cons 27
+
+x is: 27
+Producer: 86
+Producer: 19
+Producer: 74
+Producer: 20
+Producer: 87
+Producer: 38
+Producer: 10
+Producer: 79
+Producer: 66
+Producer: 40
+Consumer: 86, 7396
+Consumer: 19, 361
+Consumer: 74, 5476
+Consumer: 20, 400
+Consumer: 87, 7569
+Consumer: 38, 1444
+Consumer: 10, 100
+Consumer: 79, 6241
+Consumer: 66, 4356
+Consumer: 40, 1600
+Producer: 77
+Producer: 88
+Producer: 5
+Producer: 93
+Producer: 6
+Producer: 27
+Producer: 54
+Producer: 64
+Producer: 68
+Producer: 52
+Consumer: 77, 5929
+Consumer: 88, 7744
+Consumer: 5, 25
+Consumer: 93, 8649
+Consumer: 6, 36
+Consumer: 27, 729
+Consumer: 54, 2916
+Consumer: 64, 4096
+Consumer: 68, 4624
+Consumer: 52, 2704
+Producer: 48
+Producer: 21
+Producer: 72
+Producer: 88
+Producer: 58
+Producer: 61
+Producer: 72
+Consumer: 48, 2304
+Consumer: 21, 441
+Consumer: 72, 5184
+Consumer: 88, 7744
+Consumer: 58, 3364
+Consumer: 61, 3721
+Consumer: 72, 5184
+Threads joining

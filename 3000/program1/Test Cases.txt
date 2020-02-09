@@ -1,0 +1,77 @@
+Test 1:
+
+./cordinator.o 1 2 3 4 5
+
+Output:
+
+pid: 16047 operand: 1, 2 sum: 3
+pid of worker: 16047 result: 3
+pid: 16048 operand: 3, 4 sum: 7
+pid of worker: 16048 result: 7
+pid: 16049 operand: 5, 0 sum: 5
+pid of worker: 16049 result: 5
+pid: 16050 operand: 3, 7 sum: 10
+pid of worker: 16050 result: 10
+pid: 16051 operand: 5, 0 sum: 5
+pid of worker: 16051 result: 5
+pid: 16052 operand: 10, 5 sum: 15
+pid of worker: 16052 result: 15
+Total is: 15
+
+
+
+Test 2: 
+
+./cordinator.o
+
+output:
+
+Total is: 0
+
+
+
+Test 3:
+
+./cordinator.o 9 10 11 12 1 2 3
+
+Output:
+
+pid: 16465 operand: 9, 10 sum: 19
+pid of worker: 16465 result: 19
+pid: 16466 operand: 11, 12 sum: 23
+pid of worker: 16466 result: 23
+pid: 16467 operand: 1, 2 sum: 3
+pid of worker: 16467 result: 3
+pid: 16468 operand: 3, 0 sum: 3
+pid of worker: 16468 result: 3
+pid: 16469 operand: 19, 23 sum: 42
+pid of worker: 16469 result: 42
+pid: 16470 operand: 3, 3 sum: 6
+pid of worker: 16470 result: 6
+pid: 16471 operand: 42, 6 sum: 48
+pid of worker: 16471 result: 48
+Total is: 48
+
+
+
+Test 4:
+
+/cordinator.o 7
+
+Output:
+
+pid: 19048 operand: 7, 0 sum: 7
+pid of worker: 19048 result: 7
+Total is: 7
+
+Test 5:
+
+./cordinator.o cats dogs
+
+Output:
+
+pid: 19397 operand: 0, 0 sum: 0
+pid of worker: 19397 result: 0
+Total is: 0
+
+

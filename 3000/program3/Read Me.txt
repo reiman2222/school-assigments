@@ -1,0 +1,13 @@
+Read me for prod-cons.c
+
+Compile with:
+gcc prod-cons.c -o prod-cons.o -lpthread -lm
+
+Run with:
+./prod-cons.o <total random numbers to write to buffer>
+
+Example of running the program:
+./prod-cons.o 55
+
+writes 55 random numbers to buffer
+
