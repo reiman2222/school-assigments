@@ -1,0 +1,33 @@
+neo4j commands
+
+Import(use in neo4j bash terminal)
+
+bin/neo4j-admin import --nodes import/authors-nodes.csv --relationships import/authors-relationships.csv
+
+bin/neo4j-admin import --nodes import/institution-nodes.csv --relationships import/institution-relationships.csv
+
+show graph
+
+MATCH p=()-[r:COAUTHORED_WITH]->() RETURN p LIMIT 700
+
+MATCH (n:Author)-[:COAUTHORED_WITH]->(c:Author) WITH n,count(c) as rels, collect(c) as auths WHERE rels > 1 RETURN n,rels,auths
+
+
+
+community detection
+
+CALL algo.louvain('Author', 'COAUTHORED_WITH', {weightProperty:'weight', defaultValue:1.0, write: true, writeProperty:'community', concurrency:4}) YIELD nodes, communityCount, iterations, loadMillis, computeMillis, writeMillis
+
+
+centrality
+
+CALL algo.betweenness.stream('Author','COAUTHORED_WITH',{direction:'out’, write:true, writeProperty:’centrality’})
+YIELD nodeId, centrality
+RETURN nodeId,centrality order by centrality desc limit 20;
+
+
+//actually written as property to nodes
+CALL algo.betweenness('Institution','COAUTHORED_WITH',{direction:'out', write:true, writeProperty:'centrality'})
+
+Match (n) return n.name, n.affiliation, n.centrality order by n.centrality desc
+
