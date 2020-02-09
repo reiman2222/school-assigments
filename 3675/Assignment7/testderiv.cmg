@@ -1,0 +1,79 @@
+%% Name: Jack Edwards
+%% Date: 11/10/17
+%% Tabs: 2
+
+Package testderiv
+
+%% Test the derivative program.
+
+Import "deriv".
+
+====================================================
+%% Simplify tests
+====================================================
+
+Define ShowSimplify(e). =
+  Writeln[$(e), " = ", $(simplify e)].
+%Define
+
+Execute
+  Writeln["Simplify tests\n--------------"].
+  ShowSimplify constant(2) + constant(5).
+  ShowSimplify constant(2) + constant(5) + constant(6).
+  Writeln.
+  ShowSimplify xx - constant(0).
+  ShowSimplify constant(3) - constant(2) + constant(4).
+  ShowSimplify constant(7) - constant(5) - constant(3).
+  ShowSimplify xx - xx.
+  Writeln.
+  ShowSimplify constant(5) * constant(3) - constant(5).
+  ShowSimplify constant(0) * xx.
+  ShowSimplify xx * constant(0).
+  ShowSimplify constant(1) * xx.
+  ShowSimplify xx * constant(1).
+  ShowSimplify constant(2) * xx + constant(0).
+  Writeln.
+  ShowSimplify constant(2) ^ constant(3) * constant(2).
+  ShowSimplify constant(0) ^ xx.
+  ShowSimplify xx ^ constant(0).
+  ShowSimplify constant(10) ^ constant(0).
+  ShowSimplify constant(1) ^ xx.
+  ShowSimplify xx ^ constant(1).
+  ShowSimplify constant(7) ^ constant(1).
+  ShowSimplify constant(1) ^ constant(7).
+  
+  Writeln.
+%Execute
+
+====================================================
+%% Deriv tests
+====================================================
+
+Define ShowDeriv(e). =
+  Writeln["(", $(e), ")' = ",   $ derivative(e)].
+%Define
+
+Execute
+  Writeln["Deriv tests\n----------"].
+  ShowDeriv constant(4) + xx.
+  ShowDeriv xx + xx.
+  ShowDeriv xx.
+  ShowDeriv constant(5).
+  Writeln.
+  ShowDeriv constant(2) * xx - xx.
+  ShowDeriv constant(3) * xx ^ constant(2) - constant(7).
+  Writeln.
+  ShowDeriv xx * xx + constant(4).
+  ShowDeriv xx ^ constant(3) * xx ^ constant(2).
+  Writeln.
+  ShowDeriv constant(7) * xx ^ constant(2).
+  ShowDeriv xx ^ constant(-2).
+  ShowDeriv xx ^ constant(3).
+  ShowDeriv xx ^ constant(1).
+  ShowDeriv xx ^ constant(0).
+  ShowDeriv xx ^ xx.
+  Writeln.
+%Execute
+
+%Package
+

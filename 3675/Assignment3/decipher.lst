@@ -1,0 +1,125 @@
+Fri Sep 29 09:27:07 2017
+ECU Cinnameg, version 9.2.1 (byte code version 75)
+File /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg
+
+
+   1 Package decipher
+   2 
+   3 Import "convert.cmg".
+
+--> Import "/home/INTRA/edwardsja15/3675/Assignment3/convert.cmg"
+
+   4 Import "collect/string".
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/string.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/list.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/listfun.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/fold.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/prefsuff.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/search.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/zip.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/stringfun.cmg"
+
+   5 
+   6 Define decipher d n k = modularPower(k,d,n).
+
+--> private.decipher
+              : (Integer -> (Integer -> (Integer -> Integer)))
+              Define {--private--}
+
+   7 
+   8 Define 
+   9   case decipherNumList d n (h::t) = modularPower(h,d,n)::(decipherNumList d n t)
+  10   
+  11   case decipherNumList d n [] = []
+  12 %Define
+
+***Line 11, file /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg:
+  In the definition of 'decipherNumList':
+  Warning:
+  Identifier 'd' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+***Line 11, file /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg:
+  In the definition of 'decipherNumList':
+  Warning:
+  Identifier 'n' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+--> private.decipherNumList
+              : (Integer -> (Integer -> ([Integer] -> [Integer])))
+              Define {--private--}
+
+  13 
+  14 %%Define deciph n d = map (decipher n d).
+  15 
+  16 Define decipherFile (s,n,d) (numList) = 
+  17   numList ~> decipherNumList d n 
+  18 %Define
+
+***Line 16, file /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg:
+  In the definition of 'decipherFile':
+  Warning:
+  Identifier 's' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+--> private.decipherFile
+              : ((<a>, Integer, Integer) -> ([Integer] -> [Integer]))
+              Define {--private--}
+
+  19 
+  20 Execute
+  21   
+  22   %%read privkey
+  23   Match $(s,n,e) =~ fileContents("priv.key").
+  24   
+  25   !enchiphFile = head(commandLine).
+  26   !plainTextFile = head(tail(commandLine)).
+  27   
+  28   Match $(x: [Integer]) =~ fileContents(enchiphFile).
+  29   %%Displayln x.
+  30   Displayln decipherFile (s,n,d) x.
+  31   
+  32   
+  33 %Execute
+
+###Line 30, file /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg:
+  In the definition of 'Execute':
+  Error:
+  Unknown item identifier 'd'.
+
+
+  Some possible causes of an unknown identifier:
+    Missing import;
+    Using an identifier outside its scope;
+    Failure to use an open if, etc.;
+    A prior error.
+
+***Line 26, file /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg:
+  In the definition of 'Execute':
+  Warning:
+  Identifier 'plainTextFile' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+***Line 23, file /home/INTRA/edwardsja15/3675/Assignment3/decipher.cmg:
+  In the definition of 'Execute':
+  Warning:
+  Identifier 'e' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+  34 
+  35 %Package
+
+decipher.cmg:
+There were errors.

@@ -1,0 +1,53 @@
+%% Name: Jack Edwards
+%% Date: 10-1-17
+%% Tabs: 2
+
+Package keygen
+
+Import "collect/search.cmg".
+Import "math/prime.cmg".
+Import "convert.cmg".
+Import "misc/random.cmg".
+Import "math/modular.cmg".
+
+%%choosePrime chooses a random prime number between 256^s and 256^(1+s).
+%%s is the security parameter.
+Define choosePrime s = selectDefault 1 prime? [randomRange(256^s, 256^(s+1)),...].
+
+%%calcN calculates n where n=p*q.
+Define calcN p q = p*q.
+
+%%calcPhi calculates phi where phi = (p - 1)(q - 1).
+Define calcPhi p q = (p - 1)*(q - 1).
+
+%%gdEqual1 returns true when gcd of x and y equals 1.
+Define gcdEqual1 x y = gcd(x,y) == 1.
+
+%%calcE calculates e.
+Define calcE phi = selectDefault 1 (gcdEqual1 phi) [3,...].
+
+
+Execute
+
+  Displayln "Enter security parameter from 2 to 50".
+  !s = stringToInteger(readLine()).
+
+  Displayln "Enter key string".
+  !key = stringToNumber(readLine()).
+
+  SetRandomSeed $(key).
+
+  !p = choosePrime s.
+  !q = choosePrime s.
+  !n = calcN p q.
+  !phi = calcPhi p q.
+  !e = calcE phi.
+
+  Match d `modulo` (=phi) =~ /(e `modulo` phi).
+
+  WriteFile "pub.key", $(s, n, e).
+  WriteFile "priv.key", $(s, n, d).
+
+%Execute
+
+%Package

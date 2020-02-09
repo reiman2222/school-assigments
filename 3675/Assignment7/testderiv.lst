@@ -1,0 +1,95 @@
+Mon Nov 13 18:35:10 2017
+ECU Cinnameg, version 9.2.1 (byte code version 75)
+File /home/INTRA/edwardsja15/3675/Assignment7/testderiv.cmg
+
+
+   1 Package testderiv
+   2 
+   3 %% Test the derivative program.
+   4 
+   5 Import "deriv".
+
+--> Import "/home/INTRA/edwardsja15/3675/Assignment7/deriv.cmg"
+
+   6 
+   7 ====================================================
+   8 %% Simplify tests
+   9 ====================================================
+  10 
+  11 Define ShowSimplify(e). =
+  12   Writeln[$(e), " = ", $(simplify e)].
+  13 %Define
+
+--> Private.ShowSimplify
+              : (Expression -> ())
+              Define {--private--}
+
+  14 
+  15 Execute
+  16   Writeln["Simplify tests\n--------------"].
+  17   ShowSimplify constant(2) + constant(5).
+  18   ShowSimplify constant(2) + constant(5) + constant(6).
+  19   ShowSimplify xx - constant(0).
+  20   
+  21   %%ShowSimplify xx - xx.
+  22   %%ShowSimplify constant(3) - constant(0).
+  23   Writeln.
+  24 %Execute
+
+###Line 15, file /home/INTRA/edwardsja15/3675/Assignment7/testderiv.cmg:
+  In the definition of 'Execute':
+  Error:
+  Type error.  The following requirement led to an inconsistency.
+
+
+  Line 19. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  19.  (ShowSimplify)
+
+
+         : (Expression -> ())
+
+    Argument:
+  -  19.  (xx - (constant(0)))
+
+
+         : <a>
+           where(<a:AnyNum>)
+
+
+  Differences:
+   type 1. Expression
+   type 2. <x:AnyNum>
+
+  (Types Expression and <x:AnyNum> do not match.
+  * indicates some type, with details suppressed.
+  The mismatch might be the result of identical variables
+  showing up in parts indicated by *.)
+
+  25 
+  26 ====================================================
+  27 %% Deriv tests
+  28 ====================================================
+  29 
+  30 Define ShowDeriv(e). =
+  31   Writeln["(", $(e), ")' = ",   $ derivative(e)].
+  32 %Define
+
+--> Private.ShowDeriv
+              : (Expression -> ())
+              Define {--private--}
+
+  33 
+  34 Execute
+  35   Writeln["Deriv tests\n----------"].
+  36   ShowDeriv constant(4) + xx.
+  37   ShowDeriv xx + xx.
+  38   %%ShowDeriv xx - xx.
+  39 %Execute
+  40 
+  41 %Package
+  42 
+
+
+testderiv.cmg:
+There were errors.

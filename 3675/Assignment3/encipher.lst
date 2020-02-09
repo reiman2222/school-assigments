@@ -1,0 +1,115 @@
+Thu Sep 28 16:34:58 2017
+ECU Cinnameg, version 9.2.1 (byte code version 75)
+File /home/INTRA/edwardsja15/3675/Assignment3/encipher.cmg
+
+
+   1 Package encipher
+   2 
+   3 Import "misc/random.cmg".
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/misc/random.cmg"
+
+   4 Import "convert.cmg".
+
+--> Import "/home/INTRA/edwardsja15/3675/Assignment3/convert.cmg"
+
+   5 
+   6 %%
+   7 Define 
+   8   case generateSaltString (i+1) = char(randomRange(97,122))::generateSaltString(i)
+   9   
+  10   case generateSaltString 0 = []
+  11 %Define
+
+--> private.generateSaltString
+              : (Integer -> String)
+              Define {--private--}
+
+  12 
+  13 Define
+  14   case addSalt (s::t) = ((generateSaltString 3)++s)::addSalt(t)
+  15 
+  16   case addSalt [] = []  
+  17 %Define
+
+--> private.addSalt
+              : ([String] -> [String])
+              Define {--private--}
+
+  18 
+  19 Define encrypt e n k = modularPower(k,e,n).
+
+--> private.encrypt
+              : (Integer -> (Integer -> (Integer -> Integer)))
+              Define {--private--}
+
+  20 
+  21 
+  22 Define encipherFile (s, n, e) (filename) =
+  23   filename ~> fileContents
+  24            ~> repeatGet (getUpToN 2)
+  25                    ~> addSalt
+  26                    ~> (map stringToNumber)
+  27                    ~> (map (encrypt e n))
+  28                    
+  29 %Define
+
+***Line 22, file /home/INTRA/edwardsja15/3675/Assignment3/encipher.cmg:
+  In the definition of 'encipherFile':
+  Warning:
+  Identifier 's' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+--> private.encipherFile
+              : ((<a>, Integer, Integer) -> (String -> [Integer]))
+              Define {--private--}
+
+  30                    
+  31 Execute
+  32 
+  33   %%read pubkey
+  34   Match $(s,n,e) =~ fileContents("pub.key").
+  35   
+  36   !plainTextFile = head(commandLine).
+  37   !enciphFile = head(head(commandLine)).
+  38   
+  39   WriteFile enciphFile, $(encipherFile (s, n, e)) (plainTextFile).
+  40   
+  41 %Execute
+
+###Line 31, file /home/INTRA/edwardsja15/3675/Assignment3/encipher.cmg:
+  In the definition of 'Execute':
+  Error:
+  Type error.  The following requirement led to an inconsistency.
+
+
+  Line 39. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  39.  (WriteFile)
+
+
+         : ([<a>] -> ([<b>] -> <>))
+           where(<a:1AnyEnumerated>)
+
+    Argument:
+  -  39.  enciphFile
+
+
+         : Char
+
+
+  Differences:
+   type 1. [*] 
+   type 2. Char
+
+  (Types [*] and Char do not match.
+  * indicates some type, with details suppressed.
+  The mismatch might be the result of identical variables
+  showing up in parts indicated by *.)
+
+  42 
+  43 %Package
+
+encipher.cmg:
+There were errors.

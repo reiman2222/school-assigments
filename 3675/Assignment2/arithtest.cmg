@@ -1,0 +1,119 @@
+Package arithtest
+
+Import "arithmetic".
+
+%% The following functions are provided for convenience.
+
+Expect 
+  intToBinary: Integer -> [Integer]
+     %: intToBinary(n) is the binary equivalent of
+     %: nonnegative integer n.
+     ;
+
+  binaryToInt: [Integer] -> Integer
+     %: binaryToInt(x) is the integer that binary
+     %: list x stands for.
+%Expect
+
+Define 
+  case intToBinary (0)     = []
+  case intToBinary (2*n)   = 0 :: intToBinary(n)
+  case intToBinary (2*n+1) = 1 :: intToBinary(n)
+%Define
+
+Example
+  intToBinary(12) = [0,0,1,1]
+%Example
+
+Define 
+  case binaryToInt([])   = 0
+  case binaryToInt(0::x) = 2*binaryToInt(x)
+  case binaryToInt(1::x) = 2*binaryToInt(x) + 1
+%Define
+
+Example
+  binaryToInt([0,0,1,1]) = 12
+%Example
+
+
+Define TestInc(n: Integer). =
+  !x = intToBinary(n).
+  !y = inc(x).
+  !z = binaryToInt(y).
+
+  If z == n + 1 then
+    Displayln "inc works for %(n)".
+  else
+    Displayln "***inc(%(n)) = %(z)".
+    Displayln "---inc(%(x)) = %(y)".
+  %If
+%Define
+
+Define TestSum(a: Integer, b:Integer). =
+  !x = intToBinary(a).
+  !y = intToBinary(b).
+  !z = sum(x,y).
+  !ans = binaryToInt(z).
+
+  If ans == a + b then
+    Displayln "sum works for %(a), %(b)".
+  else
+    Displayln "***sum(%(a), %(b)) = %(ans)".
+    Displayln "---sum(%(x), %(y)) = %(z)".
+  %If
+%Define
+
+Define TestProduct(a: Integer, b:Integer). =
+  !x = intToBinary(a).
+  !y = intToBinary(b).
+  !z = product(x,y).
+  !ans = binaryToInt(z).
+
+  If ans == a * b then
+    Displayln "product works for %(a), %(b)".
+  else
+    Displayln "***product(%(a), %(b)) = %(ans)".
+    Displayln "---product(%(x), %(y)) = %(z)".
+  %If
+%Define
+
+Define TestPower(a: Integer, b:Integer). =
+  !x = intToBinary(a).
+  !y = intToBinary(b).
+  !z = power(x,y).
+  !ans = binaryToInt(z).
+
+  If ans == a ^ b then
+    Displayln "power works for %(a), %(b)".
+  else
+    Displayln "***power(%(a), %(b)) = %(ans)".
+    Displayln "---power(%(x), %(y)) = %(z)".
+  %If
+%Define
+
+Execute
+  TestInc(0).
+  TestInc(1).
+  TestInc(2).
+  TestInc(31).
+  TestInc(64).  
+  
+  TestSum(1,2).
+  TestSum(0,0).
+  TestSum(21,3).
+
+  TestProduct(0,1).
+  TestProduct(1,0).
+  TestProduct(1,1).
+  TestProduct(4,6).
+  
+  TestPower(0,1).
+  TestPower(1,0).
+  TestPower(2,2).
+  TestPower(5,8).
+
+  %% ***** Add more tests.  Test all functions.
+%Execute
+
+%Package
+

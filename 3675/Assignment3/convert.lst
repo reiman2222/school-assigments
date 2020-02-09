@@ -1,0 +1,87 @@
+Tue Sep 26 14:17:46 2017
+ECU Cinnameg, version 9.2.1 (byte code version 75)
+File /home/INTRA/edwardsja15/3675/Assignment3/convert.cmg
+
+
+   1 Package convert
+   2 
+   3 =========================================================
+   4 export
+   5 
+   6 Expect
+   7   stringToNumber: String -> Integer;
+
+--> convert.stringToNumber
+              : (String -> Integer)
+              Expect {--public--}
+
+   8   numberToString: Integer -> String;
+
+--> convert.numberToString
+              : (Integer -> String)
+              Expect {--public--}
+
+   9 %Expect
+  10 
+  11 =========================================================
+  12 implementation
+  13 
+  14 Define listToNumberWithBase b (x,y) = x*b + y.
+
+--> private.listToNumberWithBase
+              : (<a> -> ((<a>, <a>) -> <a>))
+                where(<a:AnyNum>)
+              Define {--private--}
+
+  15 
+  16 Define listToNumber = listToNumberWithBase 256.
+
+--> private.listToNumber
+              : ((<a>, <a>) -> <a>)
+                where(<a:AnyNum>)
+              Define {--private--}
+
+  17 
+  18 Define stringToNumber s = foldLtoR 0 (listToNumber) (map rank s).
+
+--> convert.stringToNumber
+              : (String -> Integer)
+              Define {--public--}
+
+  19 
+  20 
+  21 
+  22 Define
+  23   case numberToListWithBase b n = n::[] when (n `div` b) == 0
+  24    
+  25   case numberToListWithBase b n = (numberToListWithBase b (n `div` b)) +/  (n `mod` b)
+  26 %Define
+
+--> private.numberToListWithBase
+              : (Integer -> (Integer -> [Integer]))
+              Define {--private--}
+
+  27 
+  28 Define numberToList = numberToListWithBase 256.
+
+--> private.numberToList
+              : (Integer -> [Integer])
+              Define {--private--}
+
+  29 
+  30 Define numberToString n = map char (numberToList n).
+
+--> convert.numberToString
+              : (Integer -> String)
+              Define {--public--}
+
+  31 
+  32 
+  33 %%Execute
+  34 
+  35 %%Displayln stringToNumber(['a','b']).
+  36 
+  37 %%Execute
+  38 
+  39 %Package
+

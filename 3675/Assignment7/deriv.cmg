@@ -1,0 +1,355 @@
+%% Name: Jack Edwards
+%% Date: 11/10/17
+%% Tabs: 2
+
+Package derivative
+
+==============================================================
+%% This package defines type Expression, and 
+%% some functions on expressions, including
+%% 
+%%    taking the derivative of an expression
+%%   
+%%    simplifying an expression
+%%   
+%% The simplification is rudimentary.
+==============================================================
+
+==============================================================
+			export
+==============================================================
+
+==============================================================
+%%			Expression
+==============================================================
+%% The expression type is defined in the body of this package
+%% so that its representation is hidden from view.  Here,
+%% we only advertise that the type exists.
+==============================================================
+
+%: An expression involves constants, an independent variable
+%: called xx and a collection of operations.  The operations
+%: that are supported are
+%:
+%:   xx	                The independent variable
+%:   constant(c)        A constant expression having value c
+%:   A+B                The sum of expressions A and B
+
+Type Expression interface
+
+  with ==, $
+%Type
+
+==============================================================
+%%                derivativeX
+==============================================================
+
+Exception derivativeX(Expression) 
+  "Unable to take the derivative of an expression"
+%Exception
+
+==============================================================
+%%			Functions
+==============================================================
+%% Here are the exported functions for expressions.  Only 
+%% these are public.
+==============================================================
+
+Expect
+  constant	: Real -> Expression
+  
+  		%: constant(r) is an expression that is the
+		%: real number r.  For example, constant(2.5)
+		%: is the real number 2.5, as an expression.
+		;
+		
+  xx		: Expression
+  
+  		%: xx is the independent variable.
+		;
+		
+  +		: (Expression, Expression) -> Expression
+  
+  		%: a + b is the expression that is the sum of
+		%: expressions a and b.
+		;
+		
+  -		: (Expression, Expression) -> Expression
+  
+  		%: a - b is the expression that is the subtraction of
+		%: expressions a and b.
+		;
+		
+  *		: (Expression, Expression) -> Expression
+  
+  		%: a * b is the expression that is the product of
+		%: expressions a and b.
+		;
+		
+  ^		: (Expression, Expression) -> Expression
+  
+  		%: a ^ b is the expression that is the power of
+		%: expressions a and b.
+		;
+		
+  derivative	: Expression -> Expression
+  
+  		%: deriv(e) is the derivative of e with
+		%: respect to variable xx.
+		;
+  
+  simplify	: Expression -> Expression
+  
+  		%: simplify(e) is a (possibly) simplified
+		%: form of expression e.
+                ;
+
+%Expect
+
+
+========================================================
+			implementation
+========================================================
+
+Import "math/functions.cmg".
+
+========================================================
+%%		   Type Expression
+========================================================
+%% Here, type Expression type and its constructors
+%% and unconstructors are defined.  We do not want the
+%% default definition of $, and instead define our own.
+========================================================
+
+Type Expression =
+  
+  --------------------------------------------------
+  %% An expression can be a real constant.
+  --------------------------------------------------
+    
+  | constant(Real)
+    
+  --------------------------------------------------
+  %% An expression can be the independent variable xx.
+  --------------------------------------------------
+    
+  | xx
+    
+  --------------------------------------------------
+  %% An expression can be the sum of two expressions.
+  --------------------------------------------------
+    
+  | Expression + Expression
+
+  %%An expression is the subtraction of two expressions
+  
+  | Expression - Expression
+
+  %%An expression is the multiplication of two expressions
+
+  | Expression * Expression
+
+  %%An expression is the exponentiation of two expressions
+
+  | Expression ^ Expression
+
+  with ==
+    
+%Type
+========================================================
+
+========================================================
+%%		Expression Simplification
+========================================================
+
+========================================================
+%%			simplifySum
+========================================================
+%% simplifySum(e) is a (possibly) simplified form
+%% of expression e, which is presumed to be a sum.
+%% The following simplifications are employed.
+%%
+%%    0 + a = a         a + 0 = a
+%%
+%%    Computation with constants.  We replace 
+%%    constant(m) + constant(n) by constant(m+n).
+%%
+%% simplifySum only looks at e to see if it
+%% is exactly one of these forms.  It does not
+%% look inside e for subexpressions that have these
+%% forms.
+========================================================
+
+Define
+  
+  ----------------------------------------------------
+  %% constant arithmetic
+  ----------------------------------------------------
+
+  case simplifySum(constant(m) + constant(n)) = constant(m+n)
+
+  ----------------------------------------------------
+  %% 0 + a = a
+  ----------------------------------------------------
+
+  case simplifySum(constant(0) + a)  = a
+
+  ----------------------------------------------------
+  %% a + 0 = a
+  ----------------------------------------------------
+
+  case simplifySum(a + constant(0))  = a
+
+  ----------------------------------------------------
+  %% Otherwise, don't simplify.  Return a as is.
+  ----------------------------------------------------
+
+  else simplifySum(a) = a
+%Define
+
+Define
+  %%constant arithmetic
+  case simplifyMinus(constant(m) - constant(n)) = constant(m-n)
+
+  %% a - 0 = a
+  case simplifyMinus(a - constant(0)) = a
+
+  else simplifyMinus(a) = a
+%Define
+
+Define
+  %%constant arithmetic
+  case simplifyProduct(constant(m) * constant(n)) = constant(m*n)
+
+  %%0 * a = 0
+  case simplifyProduct(constant(0) * ?) = constant(0)
+
+  %%a * 0 = 0
+  case simplifyProduct(? * constant(0)) = constant(0)
+
+  %%1 * a = a
+  case simplifyProduct(constant(1) * a) = a
+
+  %%a * 1 = a
+  case simplifyProduct(a * constant(1)) = a
+  
+  else simplifyProduct(a) = a
+%Define
+ 
+ Define
+   %% 0^0 = undefined
+   %%refuse to compute 0^0
+   case simplifyPower(constant(0) ^ constant(0)) = constant(0) ^ constant(0)
+   
+   %%constant arithmetic
+   case simplifyPower(constant(m) ^ constant(n)) = constant(m ^* n)
+   
+   %%a^0 = 1
+   case simplifyPower(? ^ constant(0)) = constant(1)
+   
+   %%0^a = 0
+   case simplifyPower(constant(0) ^ ?) = constant(0)
+   
+   %%a^1 = a
+   case simplifyPower(a ^ constant(1)) = a
+   
+   %%1^a = 1
+   case simplifyPower(constant(1) ^ ?) = constant(1)
+   
+   else simplifyPower(a) = a
+ %Define
+
+========================================================
+%%			simplify
+========================================================
+%% Function simplify does a full simplification, going into
+%% the structure of an expression looking for subexpressions
+%% that can be simplified.
+========================================================
+
+Define
+  case simplify(constant(r)) = constant(r)
+  case simplify(=xx)         = xx
+
+  case simplify(a + b)       = simplifySum(simplify(a) + simplify(b))
+
+  case simplify(a - b)       = simplifyMinus(simplify(a) - simplify(b))
+
+  case simplify(a * b)       = simplifyProduct(simplify(a) * simplify(b))
+  
+  case simplify(a ^ b)       = simplifyPower(simplify(a) ^ simplify(b))
+%Define
+
+
+========================================================
+%%			Computing Derivatives
+========================================================
+
+========================================================
+%%			deriv
+========================================================
+%% deriv(e) is the derivative of expression e with
+%% respect to variable xx, but it does not do any
+%% simplifications.  It employs the rules for
+%% derivatives directly.
+========================================================
+
+Define 
+    
+  ----------------------------------------------------
+  %% c' = 0.
+  ----------------------------------------------------
+
+  case deriv(constant(?)) = constant(0)
+
+  ----------------------------------------------------
+  %% xx' = 1.
+  ----------------------------------------------------
+
+  case deriv(=xx) = constant(1)
+
+  ----------------------------------------------------
+  %% (a+b)' = a' + b'.
+  ----------------------------------------------------
+
+  case deriv(a + b) = deriv(a) + deriv(b)
+
+  %% (a-b)' = a' - b'
+  
+  case deriv(a - b) = deriv(a) - deriv(b)
+
+  %% (a * b)' = (a * b') + (a' * b)
+  
+  case deriv(a * b) = a * deriv(b) + deriv(a) * b
+
+  %% (a^c)' = c * a^(c-1)
+
+  case deriv(a^constant(c)) = constant(c) * a ^ constant(c-1)
+  
+  else deriv(e) = fail(derivativeX(e))
+  
+%Define
+
+========================================================
+%%			derivative
+=======================================================
+
+Define derivative(a) = simplify(deriv(a)).
+
+========================================================
+%%			$ for Expressions
+========================================================
+%% Function $ is used to convert an expression to a string.
+%% It tries to make the expression look readable.
+========================================================
+
+Define
+  case $(constant(r)) = $(r)
+  case $(=xx)         = "x"
+  case $(a + b)       = concat["(", $(a), "+", $(b), ")"]
+  case $(a - b)       = concat["(", $(a), "-", $(b), ")"]
+  case $(a * b)       = concat["(", $(a), "*", $(b), ")"]
+  case $(a ^ b)       = concat["(", $(a), "^", $(b), ")"]
+%Define
+
+%Package

@@ -1,0 +1,271 @@
+Sun Sep 17 13:45:08 2017
+ECU Cinnameg, version 9.2.1 (byte code version 75)
+File /home/INTRA/edwardsja15/3675/Assignment2/arithmetic.cmg
+
+
+   1 %% Name: ***
+   2 %% Date: ***
+   3 %% Tabs: ***
+   4 
+   5 Package arithmetic
+   6 
+   7 %% This package provides functions for working with integers,
+   8 %% represented as binary lists.
+   9 %% Lists begin with the low order end of the number.
+  10 %% For example, list [1,1,0,0,1] stands for the binary number
+  11 %% 10011, or 19 in decimal.
+  12 %%
+  13 %% A list is *normalized if it does not end on 0.  All of the
+  14 %% following functions produce normalized results, even if the
+  15 %% parameter(s) are not normalized.
+  16 
+  17 ================================================================
+  18                         export
+  19 ================================================================
+  20 
+  21 Abbrev Bit = Integer.
+  22 
+  23 Expect
+  24   inc           : [Bit] -> [Bit]
+  25 
+  26                 %: inc(x) is x+1, where both x and the result are
+  27                 %: binary numbers represented as lists.
+  28                 %: For example inc([1,0,1,1]) = [0,1,1,1]
+
+--> arithmetic.inc
+              : ([Integer] -> [Integer])
+              Expect {--public--}
+
+  29                 ;
+  30 
+  31   sum           :  ([Bit], [Bit]) -> [Bit]
+  32 
+  33                 %: sum(x,y) = x + y, where x, y and the result are
+  34                 %: binary numbers represented as lists.  For example,
+  35                 %: sum([0,1,1], [1,1,1]) = [1,0,1,1].  (6 + 7 = 13)
+
+--> arithmetic.sum
+              : (([Integer], [Integer]) -> [Integer])
+              Expect {--public--}
+
+  36                 ;
+  37 
+  38   product       : ([Bit], [Bit]) -> [Bit]
+  39 
+  40                 %: product(x,y) = x * y, where x, y and the result are
+  41                 %: binary numbers represented as lists.  For example,
+  42                 %: product([1,1], [1,1]) = [1,0,0,1].  (3*3 = 9)
+
+--> arithmetic.product
+              : (([Integer], [Integer]) -> [Integer])
+              Expect {--public--}
+
+  43                 ;
+  44 
+  45   power         : ([Bit], [Bit]) -> [Bit]
+  46 
+  47                 %: power(x,y) = x^y (x to the y power), where x and y
+  48                 %: and the result are binary numbers represented as lists.
+  49                 %: For example, power([1,1], [0,1]) = [1,0,0,1]
+  50                 %: (3^2 = 9).
+
+--> arithmetic.power
+              : (([Integer], [Integer]) -> [Integer])
+              Expect {--public--}
+
+  51 
+  52 %Expect
+  53 
+  54 ================================================================
+  55                         implementation
+  56 ================================================================
+  57 
+  58 Import removeTrailing from "collect/list".
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/list.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/listfun.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/fold.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/prefsuff.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/search.cmg"
+
+--> Import "/usr/local/lib/cinnameg/9-2-1/lib/collect/zip.cmg"
+
+  59 
+  60 Define normalize = removeTrailing 0.
+
+--> private.normalize
+              : ([<a>] -> [<a>])
+                where(<a:AnyNum>)
+              Define {--private--}
+
+  61 
+  62 ===============================================================
+  63 %%                    inc
+  64 ===============================================================
+  65 
+  66 %% incn is similar to inc, but does not normalize its result.
+  67 %% (n stands for non-normalizing)
+  68 
+  69 Define 
+  70   ----------------------------------------------
+  71   %% 0 + 1 = 1
+  72 
+  73   case incn []       = [1]
+  74   ----------------------------------------------
+  75   %% (2t) + 1 = 2t + 1
+  76    
+  77   case incn (0 :: t) = 1 :: t
+  78   ----------------------------------------------
+  79   %% (2t+1) + 1 = 2(t+1)
+  80 
+  81   case incn (1 :: t) = 0 :: incn t
+  82   ----------------------------------------------
+  83 %Define
+
+--> private.incn
+              : ([<a>] -> [<a>])
+                where(<a:AnyNum>)
+              Define {--private--}
+
+  84 
+  85 Define inc x = normalize(incn x).
+
+--> arithmetic.inc
+              : ([Integer] -> [Integer])
+              Define {--public--}
+
+  86 
+  87 Example inc [1,1,0,1,1,0,0] = [0,0,1,1,1].
+  88 Example inc [1] = [0,1].
+  89 Example inc [1,0,0] = [0,1].
+  90 
+  91 
+  92 %% ***** Write definitions of the remaining functions
+  93 %% ***** here and REMOVE THIS COMMENT.
+  94 
+  95 %%CONTRACT FOR SUMN
+  96 Define
+  97   case sumn([],[]) = []
+  98 
+  99   case sumn(x, []) = x
+ 100 
+ 101   case sumn([], x) = x
+ 102 
+ 103   case sumn(0::xs, 0::ys) = 0::sumn(xs, ys)
+ 104   
+ 105   case sumn(1::xs, 0::ys) = 1::sumn(xs, ys)
+ 106 
+ 107   case sumn(0::xs, 1::ys) = 1::sumn(xs, ys)
+ 108   
+ 109   case sumn(1::xs, 1::ys) = 0::sumn(inc(xs), ys)
+ 110 %Define
+
+--> private.sumn
+              : (([Integer], [Integer]) -> [Integer])
+              Define {--private--}
+
+ 111 
+ 112 Define sum x = normalize(sumn x).
+
+--> arithmetic.sum
+              : (([Integer], [Integer]) -> [Integer])
+              Define {--public--}
+
+ 113 
+ 114 Define
+ 115   case productn([], []) = [] 
+ 116   
+ 117   case productn([], ?) = []
+ 118 
+ 119   case productn(?, []) = []
+ 120 
+ 121   case productn(x::xs, 1::ys) = sum(x::xs, productn(0::x::xs, ys))
+ 122  
+ 123   case productn(x::xs, 0::ys) = productn(0::x::xs, ys)
+ 124 %Define
+
+--> private.productn
+              : (([Integer], [<a:AnyNum>]) -> [Integer])
+              Define {--private--}
+
+ 125 
+ 126 Define product x = normalize(productn x).
+
+--> arithmetic.product
+              : (([Integer], [Integer]) -> [Integer])
+              Define {--public--}
+
+ 127 
+ 128 Define
+ 129   case powern([], y::ys) = []
+ 130 
+ 131   case powern(x::xs, 1) = x::xs
+ 132 
+ 133   case powern(x, 0::ys) = powern(product(x,x), ys)
+ 134 
+ 135   case powern(x::xs, 1::ys) = product(x::xs, powern(x::xs, 0::ys))
+ 136 %Define
+
+***Line 129, file /home/INTRA/edwardsja15/3675/Assignment2/arithmetic.cmg:
+  In the definition of 'powern':
+  Warning:
+  Identifier 'y' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+***Line 129, file /home/INTRA/edwardsja15/3675/Assignment2/arithmetic.cmg:
+  In the definition of 'powern':
+  Warning:
+  Identifier 'ys' is defined but not used.  This might be an error.
+  To avoid this warning with pattern matching, try using an
+  anonymous pattern variable '?'.
+
+###Line 128, file /home/INTRA/edwardsja15/3675/Assignment2/arithmetic.cmg:
+  In the definition of 'powern':
+  Error:
+  Type error.  The following requirement led to an inconsistency.
+
+
+  Line 131. In 'Define A = B %Define', A and B must have the same type.
+
+  A =
+  - 131.  ((x :: xs), (= 1))
+
+
+         : ([<a>], <b>)
+           where(<b:AnyNum>)
+
+  B =
+  - 131.  \target83
+
+
+(\x is an internally generated name.
+Some expressions have been converted to an internal form,
+and what is shown might not be allowed in source.)
+
+
+         : ([<c>], [<d>])
+
+
+  Differences:
+   type 1. (*,<x:AnyNum>)
+   type 2. (*,[*]       )
+
+  (Types <x:AnyNum> and [*] do not match.
+  * indicates some type, with details suppressed.
+  The mismatch might be the result of identical variables
+  showing up in parts indicated by *.)
+
+ 137 
+ 138 %%Define power x = normalize(powern x).
+ 139 
+ 140 %Package
+ 141 
+
+
+/home/INTRA/edwardsja15/3675/Assignment2/arithmetic.cmg:
+There were errors.

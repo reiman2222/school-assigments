@@ -1,0 +1,174 @@
+%% Name: ***
+%% Date: ***
+%% Tabs: ***
+
+Package arithmetic
+
+%% This package provides functions for working with integers,
+%% represented as binary lists.
+%% Lists begin with the low order end of the number.
+%% For example, list [1,1,0,0,1] stands for the binary number
+%% 10011, or 19 in decimal.
+%%
+%% A list is *normalized if it does not end on 0.  All of the
+%% following functions produce normalized results, even if the
+%% parameter(s) are not normalized.
+
+================================================================
+                        export
+================================================================
+
+Abbrev Bit = Integer.
+
+Expect
+  inc           : [Bit] -> [Bit]
+
+                %: inc(x) is x+1, where both x and the result are
+                %: binary numbers represented as lists.
+                %: For example inc([1,0,1,1]) = [0,1,1,1]
+                ;
+
+  sum           :  ([Bit], [Bit]) -> [Bit]
+
+                %: sum(x,y) = x + y, where x, y and the result are
+                %: binary numbers represented as lists.  For example,
+                %: sum([0,1,1], [1,1,1]) = [1,0,1,1].  (6 + 7 = 13)
+                ;
+
+  product       : ([Bit], [Bit]) -> [Bit]
+
+                %: product(x,y) = x * y, where x, y and the result are
+                %: binary numbers represented as lists.  For example,
+                %: product([1,1], [1,1]) = [1,0,0,1].  (3*3 = 9)
+                ;
+
+  power         : ([Bit], [Bit]) -> [Bit]
+
+                %: power(x,y) = x^y (x to the y power), where x and y
+                %: and the result are binary numbers represented as lists.
+                %: For example, power([1,1], [0,1]) = [1,0,0,1]
+                %: (3^2 = 9).
+
+%Expect
+
+================================================================
+                        implementation
+================================================================
+
+Import removeTrailing from "collect/list".
+
+Define normalize = removeTrailing 0.
+
+===============================================================
+%%                    inc
+===============================================================
+
+%% incn is similar to inc, but does not normalize its result.
+%% (n stands for non-normalizing)
+
+Define 
+  ----------------------------------------------
+  %% 0 + 1 = 1
+
+  case incn []       = [1]
+  ----------------------------------------------
+  %% (2t) + 1 = 2t + 1
+   
+  case incn (0 :: t) = 1 :: t
+  ----------------------------------------------
+  %% (2t+1) + 1 = 2(t+1)
+
+  case incn (1 :: t) = 0 :: incn t
+  ----------------------------------------------
+%Define
+
+Define inc x = normalize(incn x).
+
+Example inc [1,1,0,1,1,0,0] = [0,0,1,1,1].
+Example inc [1] = [0,1].
+Example inc [1,0,0] = [0,1].
+
+===============================================================
+%%                    sum
+===============================================================
+
+%%sumn is the same as sum except sumn does not 
+%%normalize its result. (n stands for non-normalizing)
+
+Define
+  %%0 + 0 = 0
+  case sumn([],[]) = []
+  
+  %%0 + x = x
+  case sumn(x, []) = x
+  
+  %%x + 0 = x
+  case sumn([], x) = x
+
+  %%2t + 2u = 2(t + u)
+  case sumn(0::xs, 0::ys) = 0::sumn(xs, ys)
+  
+  %%(2t + 1) + 2u = 2(t + u) + 1
+  case sumn(1::xs, 0::ys) = 1::sumn(xs, ys)
+
+  %%2t + (2u + 1) = 2(t + u) + 1
+  case sumn(0::xs, 1::ys) = 1::sumn(xs, ys)
+  
+  %%(2t + 1) + (2u + 1) = 2(t + u + 1)
+  case sumn(1::xs, 1::ys) = 0::sumn(inc(xs), ys)
+%Define
+
+Define sum x = normalize(sumn x).
+
+===============================================================
+%%                    product
+===============================================================
+
+%%productn is the same as product except productn does not 
+%%normalize its result. (n stands for non-normalizing)
+
+Define  
+  %%0 * x = 0
+  case productn([], ?) = []
+
+  %%x * 0 = 0
+  case productn(?, []) = []
+  
+  %%t * (2u + 1) = t + (2t * u)
+  case productn(x::xs, 1::ys) = sum(x::xs, productn(0::x::xs, ys))
+
+  %%t * 2u = (2t) * u
+  case productn(x::xs, 0::ys) = productn(0::x::xs, ys)
+%Define
+
+Define product x = normalize(productn x).
+
+===============================================================
+%%                    power
+===============================================================
+
+%%powern is the same as power except powern does not 
+%%normalize its result. (n stands for non-normalizing)
+%%powern is undefined for 0^0.
+%%powern([],[]) = UNDEFINED
+Define
+  %%0^x = 0
+  case powern([], y::ys) = []
+  
+  %%x ^ 0 = 1
+  case powern(?, []) = [1]
+  
+  %%x^1 = x
+  case powern(x::xs, 1::[]) = x::xs
+  
+  %%t ^ 2u = (t*t)^u
+  case powern(x, 0::ys) = powern(product(x,x), ys)
+  
+  %%t ^ (2u + 1) = t * t^u
+  case powern(x::xs, 1::ys) = product(x::xs, powern(x::xs, 0::ys))
+%Define
+
+Define power x = normalize(powern x).
+
+%Package
+

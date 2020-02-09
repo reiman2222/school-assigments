@@ -1,0 +1,42 @@
+%% Name: Jack Edwards
+%% Date: 10-1-17
+%% Tabs: 2
+
+Package convert
+
+=========================================================
+export
+
+Expect
+  stringToNumber: String -> Integer;
+  numberToString: Integer -> String;
+%Expect
+
+=========================================================
+implementation
+
+Define listToNumberWithBase b (x,y) = x*b + y.
+
+%%lisToNumber converts a list to a number with base 256.
+Define listToNumber = listToNumberWithBase 256.
+
+%%stringToNumber converts string s to a base 10 integer.
+Define stringToNumber s = foldLtoR 0 (listToNumber) (map rank s).
+
+
+%%numberToListWithBase converts a number n to a list where
+%%each item in the list represents a digit in base b.
+Define
+  case numberToListWithBase b n = n::[] when (n `div` b) == 0
+   
+  case numberToListWithBase b n = (numberToListWithBase b (n `div` b)) +/  (n `mod` b)
+%Define
+
+%%numberToListWithBase converts a number to a list where
+%%each item in the list represents a digit in base 256.
+Define numberToList = numberToListWithBase 256.
+
+%%numberToString converts integer n to a string.
+Define numberToString n = map char (numberToList n).
+
+%Package

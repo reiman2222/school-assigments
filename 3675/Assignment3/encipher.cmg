@@ -1,0 +1,56 @@
+%% Name: Jack Edwards
+%% Date: 10-1-17
+%% Tabs: 2
+
+Package encipher
+
+Import "misc/random.cmg".
+Import "convert.cmg".
+
+%%generateSaltString generates a salt string of length i.
+Define 
+  case generateSaltString (i+1) = char(randomRange(97,122))::generateSaltString(i)
+  
+  case generateSaltString 0 = []
+%Define
+
+%%addSalt adds a salt string of length s to the beginning of string x
+Define addSalt s x = (generateSaltString s) ++ x.
+
+Define showProg x = x |&
+  Display ".".
+  Flush.
+%Define
+
+%%encrypt encrypts k with e and n.
+Define encrypt e n k = showProg(modularPower(k,e,n)).
+
+%%showLength shows the length of list l.
+Define showLength l = l |&
+  Displayln "There are %(length(l)) strings to encrypt.".
+%Define
+
+%%enchipherFile enchiphers the file named filename
+%%with (s,n,e).
+Define encipherFile (s, n, e) (filename) =
+  filename ~> fileContents
+           ~> repeatGet (getUpToN s)
+           ~> showLength
+		   ~> (map (addSalt s))
+		   ~> (map stringToNumber)
+		   ~> (map (encrypt e n))	   
+%Define
+		   
+Execute
+
+  %%read pubkey
+  Match $(s,n,e) =~ fileContents("pub.key").
+  
+  !plainTextFile = head(commandLine).
+  !enciphFile = head(tail(commandLine)). 
+    
+  WriteFile enciphFile, $(encipherFile (s, n, e)) (plainTextFile).
+  
+%Execute
+
+%Package

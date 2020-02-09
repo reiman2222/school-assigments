@@ -1,0 +1,66 @@
+%% Name: Jack Edwards
+%% Date: 10-1-17
+%% Tabs: 2
+
+Package decipher
+
+Import "convert.cmg".
+Import "collect/string".
+
+%%decipher deciphers k with d and n
+Define decipher d n k = modularPower(k,d,n).
+
+Define showProg x = x |&
+  Display ".".
+  Flush.
+%Define
+
+%%showLength shows the length of list l.
+Define showLength l = l |&
+  Displayln "There are %(length(l)) strings to decrypt.".
+%Define
+
+%%decipherNumList deciphers a list of intergers using n and d
+Define 
+  case decipherNumList d n (h::t) = showProg(modularPower(h,d,n))::(decipherNumList d n t)
+  
+  case decipherNumList ? ? [] = []
+%Define
+
+%%removeSalt removes s salt characters from string x.
+Define removeSalt s x = drop s x.
+
+%%mergeStrings takes a list of strings h::t and returns the string
+%%where a members of h::t have been concatonated together.
+Define 
+  case mergeStrings (h::t) = h ++ (mergeStrings t)
+
+  case mergeStrings [] = []
+%Define
+
+%%decipherFile dechiphers numList, a list of intergers, using
+%%(s,n,d).
+Define decipherFile (s,n,d) (numList) = 
+  numList ~> showLength
+          ~> decipherNumList d n
+          ~> (map numberToString)
+		  ~> (map (drop s))
+		  ~> mergeStrings
+%Define
+
+Execute
+  
+  %%read privkey
+  Match $(s,n,d) =~ fileContents("priv.key").
+  
+  !enchiphFile = head(commandLine).
+  !plainTextFile = head(tail(commandLine)).
+  
+  Match $(x: [Integer]) =~ fileContents(enchiphFile).
+  
+  WriteFile plainTextFile, (decipherFile (s,n,d) x).
+  
+  
+%Execute
+
+%Package

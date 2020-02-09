@@ -1,0 +1,245 @@
+
+
+Converted form of expression/paragraph:
+
+- 129.   Define powern =
+- 129.     (param-1 |->
+- 129.        Scope*
+- 129.          Define \target79 =
+- 129.            param-1
+- 129.          %Define
+- 129.          Yield
+- 129.            Try* {--normal--}
+- 129.              Match ((x :: xs), (= 1)) =~ \target79 %Match
+- 129.            then
+- 129.              (x :: xs)
+- 131.            else
+- 131.              Try* {--normal--}
+- 131.                Match
+- 131.                  ((x :: xs), ((= 0) :: ys))
+- 131.                 =~ 
+- 131.                  \target79
+- 131.                %Match
+- 131.              then
+- 131.                powern
+- 131.                (product((x :: xs), (x :: xs)), ys)
+- 133.              else
+- 133.                Try* {--normal--}
+- 133.                  Match
+- 133.                    ((x :: xs), ((= 1) :: ys))
+- 133.                   =~ 
+- 133.                    \target79
+- 133.                  %Match
+- 133.                then
+- 133.                  product
+- 133.                  ((x :: xs),
+- 133.                   powern((x :: xs), (0 :: ys)))
+- 134.                else
+- 134.                  Ensure
+- 134.                    false else
+- 134.                    noMatchCaseX
+- 134.                    ("powern(" ++ ((errView(\target79)) ++ ")"))
+- 134.                  %Ensure
+- 133.                %Try*
+- 131.              %Try*
+- 129.            %Try*
+- 129.          %Yield
+- 129.        %Scope*)
+- 129.   %Define
+
+
+-----Types:
+
+- 128.   \target79       : ([<a>], <b:AnyNum>)
+- 129.   powern          : <>
+- 129.   param-1         : ([<a>], <b:AnyNum>)
+- 129.   ::              : ((<a>, [<a>]) -> [<a>])
+- 129.   x               : <a>
+- 129.   xs              : [<a>]
+- 129.   castInt         : (Integer -> <b:AnyNum>)
+- 129.   \target79       : ([<a>], <b:AnyNum>)
+- 129.   ::              : ((<a>, [<a>]) -> [<a>])
+- 131.   ::              : ((<c>, [<c>]) -> [<c>])
+- 131.   x               : <c>
+- 131.   xs              : [<c>]
+- 131.   castInt         : (Integer -> <d:AnyNum>)
+- 131.   ys              : [<d:AnyNum>]
+- 131.   \target79       : ([<a>], <b:AnyNum>)
+- 131.   powern          : <>
+- 131.   product         : (([Integer], [Integer]) -> [Integer])
+- 131.   ::              : ((<e>, [<e>]) -> [<e>])
+- 131.   ::              : ((<f>, [<f>]) -> [<f>])
+- 133.   ::              : ((<g>, [<g>]) -> [<g>])
+- 133.   x               : <>
+- 133.   xs              : <>
+- 133.   castInt         : (Integer -> <h:AnyNum>)
+- 133.   ys              : <>
+- 133.   \target79       : ([<a>], <b:AnyNum>)
+- 133.   product         : (([Integer], [Integer]) -> [Integer])
+- 133.   ::              : ((<i>, [<i>]) -> [<i>])
+- 133.   powern          : <>
+- 133.   ::              : ((<j>, [<j>]) -> [<j>])
+- 133.   ::              : ((<k>, [<k>]) -> [<k>])
+- 133.   castInt         : (Integer -> <l:AnyNum>)
+- 134.   noMatchCaseX    : (String -> ExceptionType)
+- 134.   ++              : (([<m>], [<m>]) -> [<m>])
+- 134.   ++              : (([<n>], [<n>]) -> [<n>])
+- 134.   errView         : (<o> -> String)
+- 134.   \target79       : ([<a>], <b:AnyNum>)
+
+
+
+---------------------------------------------------
+--- Summary of inference steps leading to error ---
+
+---------------------------------------------------
+
+  Line 131. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  - 131.  castInt
+
+
+         : (Integer -> <b>)
+           where(<b:AnyNum>)
+
+  Argument A =
+  - 131.  0
+
+
+
+  Type of f(A): <e>
+---------------------------------------------------
+
+  Line 131. The expression must have the same type as its body A.
+
+  Expr =
+  - 131.  (= 0)
+
+
+         : <f>
+
+  A (inference core) =
+  - 131.  0
+
+
+         : <b>
+           where(<b:AnyNum>)
+
+
+  Line 131. After unification:
+
+  Expr =
+  - 131.  (= 0)
+
+
+         : <b>
+           where(<b:AnyNum>)
+
+  A (inference core) =
+  - 131.  0
+
+
+         : <b>
+           where(<b:AnyNum>)
+
+---------------------------------------------------
+
+  Line 131. Expression (A,B) has type (S,T) when A has type S and B has type T.
+
+  A =
+  - 131.  (= 0)
+
+
+         : <b>
+           where(<b:AnyNum>)
+
+  B =
+  - 131.  ys
+
+
+         : <g>
+
+  Expr =
+  - 131.  ((= 0), ys)
+
+
+         : <h>
+
+
+  Line 131. After unification:
+
+  A =
+  - 131.  (= 0)
+
+
+         : <b>
+           where(<b:AnyNum>)
+
+  B =
+  - 131.  ys
+
+
+         : <g>
+
+  Expr =
+  - 131.  ((= 0), ys)
+
+
+         : (<b>, <g>)
+           where(<b:AnyNum>)
+
+---------------------------------------------------
+
+  Line 131. If function f has type S -> T then its argument must have type S.
+  Function:
+  - 131.  (~::)
+
+
+         : ((<i>, [<i>]) -> [<i>])
+
+    Argument:
+  - 131.  ((= 0), ys)
+
+
+         : (<b>, <g>)
+           where(<b:AnyNum>)
+
+---------------------------------------------------
+
+  Line 131. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  - 131.  (~::)
+
+
+         : ((<b>, [<b>]) -> [<b>])
+           where(<b:AnyNum>)
+
+  Argument A =
+  - 131.  ((= 0), ys)
+
+
+
+  Type of f(A): <j>
+---------------------------------------------------
+
+  Line 131. In 'Define A = B %Define', A and B must have the same type.
+
+  A =
+  - 131.  ((x :: xs), ((= 0) :: ys))
+
+
+         : ([<a>], [<b>])
+           where(<b:AnyNum>)
+
+  B =
+  - 131.  \target79
+
+
+         : ([<c>], <d>)
+           where(<d:AnyNum>)
+
+---------------------------------------------------
+
+

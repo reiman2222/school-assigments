@@ -1,0 +1,304 @@
+
+
+Converted form of expression/paragraph:
+
+-  17.   Define encipherFile =
+-  17.     ((s, n, e) |->
+-  17.        (filename |->
+-  18.           ((fileContents(filename))
+-  19.            ~>((repeatGet(getUpToN(2)))))
+-  20.           ~>((map(++)(generateSaltString)))))
+-  17.   %Define
+
+
+-----Types:
+
+-  17.   encipherFile    : ((<a>, <b>, <c>) -> ([<d:1AnyEnumerated>] -> <e>))
+-  17.   s               : <a>
+-  17.   n               : <b>
+-  17.   e               : <c>
+-  17.   filename        : [<d:1AnyEnumerated>]
+-  18.   fileContents    : ([<d:1AnyEnumerated>] -> [<f>])
+-  18.   filename        : [<d:1AnyEnumerated>]
+-  19.   repeatGet       : (([<f>] -> ([<f>], [<f>])) -> ([<f>] -> [[<f>]]))
+-  19.   getUpToN        : (Integer -> ([<f>] -> ([<f>], [<f>])))
+-  19.   castInt         : (Integer -> Integer)
+-  20.   map             : ((([<g>], [<g>]) -> [<g>]) -> ((Integer -> String) -> ([[<f>]] -> <e>)))
+-  20.   ++              : (([<g>], [<g>]) -> [<g>])
+-  20.   generateSaltString: (Integer -> String)
+
+
+
+---------------------------------------------------
+--- Summary of inference steps leading to error ---
+
+---------------------------------------------------
+
+  Line 18. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  18.  fileContents
+
+
+         : ([<d>] -> <e>)
+           where(<d:1AnyEnumerated>)
+
+    Argument:
+  -  18.  filename
+
+
+         : <f>
+
+---------------------------------------------------
+
+  Line 18. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  18.  fileContents
+
+
+         : ([<d>] -> <e>)
+           where(<d:1AnyEnumerated>)
+
+  Argument A =
+  -  18.  filename
+
+
+
+  Type of f(A): <g>
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  19.  castInt
+
+
+         : (Integer -> <h>)
+           where(<h:AnyNum>)
+
+  Argument A =
+  -  19.  2
+
+
+
+  Type of f(A): <i>
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  19.  getUpToN
+
+
+         : (Integer -> ([<j>] -> ([<j>], [<j>])))
+
+    Argument:
+  -  19.  2
+
+
+         : <h>
+           where(<h:AnyNum>)
+
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  19.  getUpToN
+
+
+         : (Integer -> ([<j>] -> ([<j>], [<j>])))
+
+  Argument A =
+  -  19.  2
+
+
+
+  Type of f(A): <k>
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  19.  repeatGet
+
+
+         : (([<b>] -> (<l>, [<b>])) -> ([<b>] -> [<l>]))
+
+    Argument:
+  -  19.  (getUpToN(2))
+
+
+         : ([<j>] -> ([<j>], [<j>]))
+
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  19.  repeatGet
+
+
+         : (([<b>] -> ([<b>], [<b>])) -> ([<b>] -> [[<b>]]))
+
+  Argument A =
+  -  19.  (getUpToN(2))
+
+
+
+  Type of f(A): <m>
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  19.  (repeatGet(getUpToN(2)))
+
+
+         : ([<b>] -> [[<b>]])
+
+    Argument:
+  -  18.  (fileContents(filename))
+
+
+
+---------------------------------------------------
+
+  Line 19. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  19.  (repeatGet(getUpToN(2)))
+
+
+         : ([<b>] -> [[<b>]])
+
+  Argument A =
+  -  18.  (fileContents(filename))
+
+
+
+  Type of f(A): <n>
+---------------------------------------------------
+
+  Line 20. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  20.  map
+
+
+         : ((<o> -> <p>) -> (<q> -> <r>))
+
+    Argument:
+  -  20.  (++)
+
+
+         : (([<a>], [<a>]) -> [<a>])
+
+---------------------------------------------------
+
+  Line 20. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  20.  map
+
+
+         : ((([<a>], [<a>]) -> [<a>]) -> (<q> -> <r>))
+
+  Argument A =
+  -  20.  (++)
+
+
+
+  Type of f(A): <s>
+---------------------------------------------------
+
+  Line 20. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  20.  (map(++))
+
+
+         : (<q> -> <r>)
+
+    Argument:
+  -  20.  generateSaltString
+
+
+         : (Integer -> String)
+
+---------------------------------------------------
+
+  Line 20. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  20.  (map(++))
+
+
+         : ((Integer -> String) -> <r>)
+
+  Argument A =
+  -  20.  generateSaltString
+
+
+
+  Type of f(A): <t>
+---------------------------------------------------
+
+  Line 20. An expression that is applied must be a function.
+  (An error in this often occurs because of a missing operator or comma.)
+
+  Function:
+  -  20.  (map(++)(generateSaltString))
+
+
+
+---------------------------------------------------
+
+  Line 20. If function f has type S -> T then its argument must have type S.
+  Function:
+  -  20.  (map(++)(generateSaltString))
+
+
+         : (<u> -> <c>)
+
+    Argument:
+  -  18.  ((fileContents(filename))
+  -  19.   ~>((repeatGet(getUpToN(2)))))
+
+
+         : [[<b>]]
+
+---------------------------------------------------
+
+  Line 20. If function f has type S -> T then expression f(A) must have type T.
+
+  Function f =
+  -  20.  (map(++)(generateSaltString))
+
+
+         : ([[<b>]] -> <c>)
+
+  Argument A =
+  -  18.  ((fileContents(filename))
+  -  19.   ~>((repeatGet(getUpToN(2)))))
+
+
+
+  Type of f(A): <v>
+---------------------------------------------------
+
+  Line 20. The type of identifier 'map' does not match any available types.
+  This program requires
+
+  -  20.  map
+
+
+         : ((([<a>], [<a>]) -> [<a>]) -> ((Integer -> String) -> ([[<b>]] -> <c>)))
+   
+     Available types for 'map':
+     ((<za> -> <zb>) -> (BinarySearchTree of (<za>) -> BinarySearchTree of (<zb>)))
+     ((<za> -> <zb>) -> (Tree of ((<za>, <za>)) -> Tree of ((<zb>, <zb>))))
+     ((<za> -> <zb>) -> (<zc> of (<za>) -> <zc> of (<zb>)))
+          where(<zc:AnyMappableCovariantNonconforming>)
+     ((<za> -> <zb>) -> (<zc> of (<za>) -> <zc> of (<zb>)))
+          where(<zc:AnyMappableCovariantConforming>)
+
+
+---------------------------------------------------
+
+
